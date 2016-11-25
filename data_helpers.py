@@ -8,7 +8,7 @@ def load_ag_data():
     train = pd.read_csv('data/ag_news_csv/train.csv', header=None)
     train = train.dropna()
 
-    x_train = train[1] + train[2]
+    x_train = train[1] + train[2]  # concatenate the title and description
     x_train = np.array(x_train)
 
     y_train = train[0] - 1
@@ -27,7 +27,7 @@ def load_ag_data():
 def mini_batch_generator(x, y, vocab, vocab_size, vocab_check, maxlen,
                          batch_size=128):
 
-    for i in xrange(0, len(x), batch_size):
+    for i in xrange(0, len(x), batch_size):  # a generator by batch_size
         x_sample = x[i:i + batch_size]
         y_sample = y[i:i + batch_size]
 
@@ -47,17 +47,17 @@ def encode_data(x, maxlen, vocab, vocab_size, check):
     for dix, sent in enumerate(x):
         counter = 0
         sent_array = np.zeros((maxlen, vocab_size))
-        chars = list(sent.lower().replace(' ', ''))
+        chars = list(sent.lower().replace(' ', ''))  # delete the space character???
         for c in chars:
             if counter >= maxlen:
-                pass
+                pass  # why not break!!?
             else:
-                char_array = np.zeros(vocab_size, dtype=np.int)
+                char_array = np.zeros(vocab_size, dtype=np.int)   # all int zero
                 if c in check:
-                    ix = vocab[c]
+                    ix = vocab[c]  # vocab : char 2 index
                     char_array[ix] = 1
-                sent_array[counter, :] = char_array
-                counter += 1
+                sent_array[counter, :] = char_array  # so wordage
+                counter += 1  # no matter the character is effective or not, it counts.
         input_data[dix, :, :] = sent_array
 
     return input_data
